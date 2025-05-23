@@ -1,0 +1,32 @@
+@startuml N-S G
+
+actor "User" as User
+actor "API Linguistic Analisys" as AnLingAPI
+actor "API Sentence Toxicity" as ToxicAPI
+
+rectangle "Non-Sense Phrase Generator" {
+
+(Choose verbal time) as verbaltense
+    (Insert input phrase) as Input
+    (Sentence components analisys) as Analisys
+    (Generate non-sense phrase) as Generate
+    (Verifier of toxicity) as Verifing
+    (Show the final result) as Show
+
+}
+
+User --> Input
+User --> verbaltense
+verbaltense --> Analisys
+Input --> Analisys
+Analisys --> AnLingAPI : send phrase
+AnLingAPI --> Analisys : return phrase's components
+Analisys --> Generate
+Generate --> Verifing
+Verifing --> ToxicAPI : send non-sense generated phrase
+ToxicAPI --> Verifing : return toxicity value
+Verifing --> Show
+User --> Show
+
+
+@enduml

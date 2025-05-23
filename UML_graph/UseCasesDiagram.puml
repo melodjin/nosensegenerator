@@ -1,0 +1,36 @@
+@startuml
+
+''ci mettiamo anche il template??''
+
+actor User
+rectangle "NoSenseGenerator" {
+    actor Generator
+    actor Analyser
+    actor Moderator
+    actor Dictionary
+    actor Templates
+    User --> (Sentence in)
+    Generator <--(Sentence in)
+    Generator <-- (ottieni la frase analizzata)
+    Analyser --> (ottieni la frase analizzata)
+    Generator --> (scegli il template)
+    Templates --> (scegli il template)
+    Generator --> (riempi il template)
+    Dictionary --> (riempi il template)
+    Templates --> (riempi il template)
+    Generator --> (calcola quanti token mancano)
+    Generator --> (controlla toxicity)
+    Moderator <-- (controlla toxicity)
+    Generator --> (sentence out)
+    User<--(sentence out)
+    Moderator --> (risultato toxicity)
+    User <-- (risultato toxicity)
+}
+
+
+
+
+
+
+
+@enduml

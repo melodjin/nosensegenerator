@@ -1,0 +1,41 @@
+' Sfondo 
+skinparam backgroundColor #ecf4f4
+
+' User
+skinparam actor {
+  BorderColor #000dff      
+  BackgroundColor #6ddbff  
+  FontColor #000000        
+}
+
+' Partecipanti (Participants)
+skinparam participant {
+  BorderColor #8000FF      
+  BackgroundColor #efcdef  
+  FontColor #000000        
+}
+
+' ' Freccie e linee
+' skinparam ArrowColor black
+' skinparam sequence {
+'   ArrowColor black
+' }
+
+' ' Testo generale
+' skinparam defaultFontColor #000000
+
+' Loop color blu
+skinparam loop {
+  BorderColor #0000FF
+  BackgroundColor #B0E0E6  ' Pastello azzurro
+  FontColor #000000
+}
+
+' Alt block con sfondo rosa
+skinparam alt {
+  BackgroundColor #FFB6C1  ' Rosa pastello
+  BorderColor #FF69B4
+  FontColor #000000
+}
+
+

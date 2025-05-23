@@ -1,0 +1,30 @@
+@startuml InternalFillTemplate
+
+activate Generator
+Generator -> Templates: fillTemplate(t: Template, n:List<Name>, a: List<Adjective>, v: List<Verb>)
+activate Templates
+
+loop foreach Token in Template
+    opt isString
+        Templates->Templates: add token at the end of the Sentence
+    end
+    opt isName
+        Templates ->Templates: add Name from n at the end of the Sentece
+        Templates ->Templates: remove Name from n
+    end
+    opt isAdj
+        Templates ->Templates: add Adjective from a at the end of the Sentece
+        Templates ->Templates: remove Adjective from a
+    end
+    opt isVerb
+        Templates ->Templates: add Verb from v at the end of the Sentece
+        Templates ->Templates: remove Verb from v
+    end       
+end
+
+Templates --> Generator: return Sentence 
+deactivate Templates
+
+deactivate Generator
+
+@enduml

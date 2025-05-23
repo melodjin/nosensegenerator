@@ -1,0 +1,90 @@
+@startuml System_Sequence_Diagrams_internal_TextAnalysis
+!include Graphic.puml
+
+'Dichiarazione degli attori e partecipanti
+actor User
+
+'participant "Input Sentence" as S1
+participant "Output Sentence" as S2
+participant "No sense generator (main)" as Main
+participant Dictionary
+participant Template
+participant "API Google" as ApiGoogle
+participant "API Toxicity" as ApiToxicity
+
+
+
+'Seconda parte del grafico
+== Ask to create a no sense random sentence==
+User -> Main: [Terminal: Create sentence]
+activate Main
+Main -> Template: request_template()
+activate Template 
+Template --> Main: Return template[i]
+deactivate Template
+
+Main --> S2**: out_sentence = template
+
+Main --> S2: Count_missingNoun(out_sentence)
+Main --> S2: Count_missingAdjective(out_sentence)
+Main --> S2: Count_missingVerb(out_sentence)
+
+loop end when sentence is returned
+    'salva in un array nomi, aggettivi, verbi
+    loop foreach missing noun
+    Main -> Dictionary: Request_noun()
+    activate Dictionary
+    Dictionary --> Main: Return noun
+    Main -> Main: nouns[i] = noun
+    end 
+
+    loop foreach missing adjective
+    Main -> Dictionary: Request_adjective()
+    Dictionary --> Main: Return adjective
+    Main -> Main: adjectives[i] = adjective
+    end 
+
+    loop foreach missing verb
+    Main -> Dictionary: Request_verb()
+    Dictionary --> Main: Return verb
+    deactivate Dictionary
+    Main -> Main: verbs[i] = verb
+    end 
+
+    'Build the sentence
+
+    loop foreach missing noun
+    Main -> S2: insert_noun()
+    end 
+
+    loop foreach missing adjective
+    Main -> S2: insert_adjective()
+    end 
+
+    loop foreach missing verbu8
+    Main -> S2: insert_verb()
+    end 
+
+    S2 -> ApiToxicity: analyze_toxicity(out_sentence)
+    activate ApiToxicity
+
+    alt check toxicity
+        ApiToxicity --> Main: [Return unacceptable toxicity]
+        Main --> S2: out_sentence = template
+        'In questo caso out_sentence torna ad essere il template vuoto che era stato scelto, il quale verra' riempito con nuovi tokens
+        note left
+        out_sentence returns to being 
+        the empty template, which will be 
+        filled with new tokens
+        end note
+    else
+        ApiToxicity --> Main: [Return acceptable toxicity]
+        deactivate ApiToxicity
+        Main --> S2: Return 
+        S2 --> User: Return out_sentence 
+        deactivate Main
+    end 
+end
+
+
+@enduml

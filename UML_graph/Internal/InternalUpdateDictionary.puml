@@ -1,0 +1,42 @@
+@startuml InternalUpdateDictionary
+'!include Graphic.puml
+
+activate Generator
+
+loop foreach noun
+    Generator -> Dictionary: CheckIfNounExist(noun[i])
+    activate Dictionary
+    Dictionary --> Generator: Return true/false
+    alt false
+        Generator -> Dictionary: SaveNoun(noun[i])
+        Dictionary --> Generator: Return
+    end
+end
+
+loop foreach adjective
+    Generator -> Dictionary: CheckIfAdjectiveExist(adjective[i])
+    Dictionary --> Generator: Return true/false
+    alt false
+        Generator -> Dictionary: SaveAdjective(adjective[i])
+        Dictionary --> Generator: Return
+    end
+end
+
+loop foreach verb
+    Generator -> Dictionary: CheckIfVerbExist(verb[i])
+    Dictionary --> Generator: Return true/false
+    alt false
+        Generator -> Dictionary: SaveVerb(verb[i])
+        Dictionary --> Generator: Return
+    end
+    deactivate Dictionary
+end
+
+deactivate Generator
+
+
+
+
+
+
+@enduml

@@ -1,0 +1,83 @@
+@startuml
+
+class Sentence{
+    -sentence: String
+    '+getSentence(): Sentence
+    '+setSentece(t: String): void
+    +addToken(t: String): void
+    
+}
+
+class Dictionary{
+    -names: List<Name>
+    -verbs: List<Verb>
+    -adjs: List<Adjective>
+    ''+chooseTokens(names: int, verbs: int, adj: int ): List<Token>
+    'decidere se chiamare il metodo una volta e restituire una lista o chiamarlo tante volte quanti i token
+    '+getNames(nameNumber: int): List<Name>
+    '+getVerbs(VerbNumber: int): List<Verb>
+    '+getAdj(adjNumber: int): List<Adjective>
+    +getName(): Name
+    +getVerb(): Verb
+    +getAdj(): Adjective
+    -chooseToken(List<Token>): Token
+}
+
+
+
+class Templates{
+    'classe che gestisce i template
+    -TemplatesList: List<Template>
+    +chooseTemplate(): Template
+    +fillTemplate(t: Template, names: List<Name>, verbs: List<Verb>, adj: List<Adjective>): Sentence
+}
+
+class Template{
+    'Il template è una lista di Stringhe o Token
+    +Template(t: List<Object>)
+    -namesNumber
+    -verbsNumber
+    -adjNumber
+    'è ovvio che dobbiamo mettere i get set, non li metterei nel diagramma che incasinano tutto
+    '-setNamesNumber()
+    '-setAdjsNumber()
+    '-setVerbsNumber()
+    '+getNames(): int
+    '+getAdj(): int
+    '+getVerbs(): int
+    +getTemplate(): Template
+}
+
+
+class Analizer{
+    +getAnalyses(sentenceIn: Sentence): List<Token>
+    'metodi per interagire con l'API
+}
+
+class Token{
+    -token
+    +getToken(): Token 
+    +setToken(s: String)
+}
+
+class Name extends Token{}
+class Adjective extends Token{}
+class Verb extends Token{
+    -regular: boolean
+    +isRegular(): boolean
+}
+
+
+class Moderator {
+    +analToxicity(sentence: String): boolean
+    'metodi per comunicare con API toxicity
+}
+
+Class Generator{
+    +countMissingTokens(t: Template, n: List<Token>): int
+    
+}
+
+Sentence --> Dictionary : dioporco
+
+@enduml

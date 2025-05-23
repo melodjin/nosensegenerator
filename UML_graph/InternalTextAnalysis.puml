@@ -1,0 +1,63 @@
+@startuml System_Sequence_Diagrams_internal_TextAnalysis
+!include Graphic.puml
+
+'Dichiarazione degli attori e partecipanti
+actor User
+
+participant "Input Sentence" as S1
+'participant "Output Sentence" as S2
+participant "No sense generator (main)" as Main
+participant Dictionary
+participant Template
+participant "API Google" as ApiGoogle
+participant "API Toxicity" as ApiToxicity
+
+'Prima parte del grafico
+== Text analysis and new token insertion into dictionaries ==
+User -> S1**: [Terminal: Enter sentence]
+activate S1
+S1 -> Main: input
+activate Main
+Main -> ApiGoogle: analyze(input_sentence)
+activate ApiGoogle
+ApiGoogle --> Main: Return tokens
+deactivate ApiGoogle
+
+loop foreach noun
+    Main -> Dictionary: CheckIfNounExist(noun[i])
+    activate Dictionary
+    Dictionary --> Main: Return true/false
+    alt false
+        Main -> Dictionary: SaveNoun(noun[i])
+        Dictionary --> Main: Return
+    end
+end 
+
+loop foreach adjective
+    Main -> Dictionary: CheckIfAdjectiveExist(adjective[i])
+    Dictionary --> Main: Return true/false
+    alt false
+        Main -> Dictionary: SaveAdjective(adjective[i])
+        Dictionary --> Main: Return
+    end
+end 
+
+loop foreach verb
+    Main -> Dictionary: CheckIfVerbExist(verb[i])
+    Dictionary --> Main: Return true/false
+    alt false
+        Main -> Dictionary: SaveVerb(verb[i])
+        Dictionary --> Main: Return
+    end
+    deactivate Dictionary
+end 
+
+Main --> User: Return "done"
+deactivate Main
+deactivate S1
+
+
+
+
+
+@enduml

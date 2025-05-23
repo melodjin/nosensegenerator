@@ -1,0 +1,35 @@
+@startuml InternalBuildTokenList
+
+participant Generator
+participant Dictionary
+
+'generator ha il template e le liste di name, adj e verb fornite dall'analizer
+
+== counting missing word ==
+
+Generator -> Generator: Count missing name
+Generator -> Generator: Count missing adj
+Generator -> Generator: Count missing verb
+
+
+== filling the tokens list ==
+
+
+loop foreach missing Name
+    Generator -> Dictionary : request Name
+    Dictionary -> Generator : return Name
+    Generator -> Generator: put Name into NameList
+end
+loop foreach missing Adj
+    Generator -> Dictionary : request Adjective
+    Dictionary -> Generator : return Adjective
+    Generator -> Generator: put Adjective into AdjectiveList
+end
+loop foreach missing Verb
+    Generator -> Dictionary : request Verb
+    Dictionary -> Generator : return Verb
+    Generator -> Generator: put Verb into VerbList
+end
+
+
+@enduml

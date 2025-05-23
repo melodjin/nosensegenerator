@@ -1,0 +1,27 @@
+@startuml Domain_Model
+'!include Graphic.puml
+
+'Grafico
+actor User
+participant Sentence
+participant "No sense generator (main)" as Main
+participant "API Google" as ApiGoogle
+participant "API Toxicity" as ApiToxicity
+participant Template
+participant Dictionary
+
+User-> Sentence**: input
+Sentence -> Main: input
+
+Main -> ApiGoogle: Analize sentence
+Main -> ApiToxicity: Check Toxicity
+Main -> Template: Choose template
+Main -> Dictionary: Take/Send tokens
+Dictionary -> Token: Take/Send
+
+
+
+
+
+
+@enduml

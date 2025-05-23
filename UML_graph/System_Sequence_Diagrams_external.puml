@@ -1,0 +1,58 @@
+@startuml System_Sequence_Diagrams_external
+!include Graphic.puml
+
+'Dichiarazione degli attori e partecipanti
+actor User
+
+participant "No sense generator (main)" as Main
+participant Dictionary
+participant Template
+participant "API Google" as ApiGoogle
+participant "API Toxicity" as ApiToxicity
+
+'Prima parte del grafico
+== Text analysis and new token insertion into dictionaries ==
+User -> Main: Enter sentence
+activate Main
+Main -> ApiGoogle: Ask to analyze
+activate ApiGoogle
+ApiGoogle --> Main: Return components
+deactivate ApiGoogle
+Main -> Dictionary: Save new words
+activate Dictionary
+Dictionary --> Main: Return
+deactivate Dictionary
+Main --> User: Return "done"
+deactivate Main
+
+'Seconda parte del grafico
+== Ask to create a no sense random sentence==
+User -> Main: Ask to create sentence
+activate Main
+Main -> Template: Request template
+activate Template 
+Template --> Main: Return template
+deactivate Template
+Main -> Main: Count missing words
+
+loop end when sentence is returned
+    Main -> Dictionary: Request tokens
+    activate Dictionary
+    Dictionary --> Main: Return tokens
+    deactivate Dictionary
+    Main -> Main: Build the sentence
+    Main -> ApiToxicity: Ask to analyze toxicity
+    activate ApiToxicity
+
+    alt check toxicity
+        ApiToxicity --> Main: [Return unacceptable toxicity]
+    else
+        ApiToxicity --> Main: [Return acceptable toxicity]
+        deactivate ApiToxicity
+        Main --> User: Return the sentence 
+        deactivate Main
+    end 
+end
+
+
+@enduml

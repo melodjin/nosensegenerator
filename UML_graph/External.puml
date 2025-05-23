@@ -1,0 +1,62 @@
+@startuml System_Sequence_Diagrams_external
+
+'Dichiarazione degli attori e partecipanti
+actor User
+
+participant Generator
+participant Dictionary
+participant Templates
+participant Analyzer
+participant Moderator
+
+'Prima parte del grafico
+== Text analysis and new token insertion into dictionaries ==
+User -> Generator: Enter sentence
+activate Generator
+Generator -> Analyzer: Ask to analyze
+activate Analyzer
+Analyzer --> Generator: Return tokens
+deactivate Analyzer
+Generator -> Dictionary: Save new words
+activate Dictionary
+Dictionary --> Generator: Return
+deactivate Dictionary
+Generator --> User: Return "done"
+deactivate Generator
+
+'Seconda parte del grafico
+== Building a no sense random sentence==
+User -> Generator: Ask to create sentence
+activate Generator
+Generator -> Templates: Request Template
+activate Templates
+Templates --> Generator: Return Template
+deactivate Templates
+Generator -> Generator: Count missing tokens
+
+loop end when you have all the tokens
+    Generator -> Dictionary: Request token
+    activate Dictionary
+    Dictionary --> Generator: Return token
+    deactivate Dictionary
+end
+Generator --> Templates : fill the template
+activate Templates
+Templates --> Generator: return Sentence
+deactivate Templates
+
+== Checking Toxicity ==
+Generator -> Moderator: Ask to analyze toxicity
+activate Moderator
+alt check toxicity
+    Moderator --> Generator: [Return unacceptable toxicity]
+    Generator --> User: [Return unacceptable toxicity]
+else
+    Moderator --> Generator: [Return acceptable toxicity]
+    deactivate Moderator
+    Generator --> User: Return the sentence
+    deactivate Generator
+end
+
+
+@enduml
